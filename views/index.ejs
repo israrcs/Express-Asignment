@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html ng-app>
+  <head>
+    <title>Express</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+  </head>
+  <body>
+
+  <div ng-controller="main" class="panel panel-primary">
+      <div class="panel-heading"><h1>Sign Up</h1></div>
+
+      <form ng-submit="submit(signUpForm)" name="signUpForm" class="form-group">
+          <b>User Name</b>
+          <input type="text" name="name" class="form-control" ng-model="newUser.name" required autofocus/>
+          <b>Email</b>
+          <input type="email" name="email" class="form-control" ng-model="newUser.email" required/>
+          <input type="submit" class="btn btn-primary"/>
+      </form>
+
+      <h2> Users </h2>
+
+      <div>
+          <table ng-show="users.length" class="table table-striped table-bordered">
+              <thead class="bg-primary">
+                  <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr ng-repeat="user in users">
+                      <td>{{user.name}}</td>
+                      <td>{{user.email}}</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+
+  </div>
+  <script>
+      function main ($scope, $http){
+          $scope.users = [];
+          $scope.newUser = {};
+
+          $scope.submit = function(signUpForm){
+              $http({
+                  method : 'POST',
+                  url    : '/sign-up',
+                  data   : $scope.newUser
+
+              }).success(function(res){
+                  $scope.newUser = {};
+                  console.log(res);
+                  $scope.users = res;
+              });
+          }
+      }
+  </script>
+  </body>
+</html>
